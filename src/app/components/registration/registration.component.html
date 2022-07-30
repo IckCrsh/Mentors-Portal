@@ -2,20 +2,16 @@
 
 <form [formGroup]="registrationForm">
 
-<!--Div for login-->
-
   <div>
     <label for="email">Enter email*</label>
     <input id="email" type="text" formControlName="login" placeholder="ex: ickizz@gmail.com">
-    <p *ngIf="login.errors?.['required'] && login.dirty">
+    <p *ngIf="login.errors?.['required'] && login.dirty && login.updateOn === 'blur'">
       Email field cant be empty
     </p>
     <p *ngIf="login.errors?.['email']">
       Email is incorrect
     </p>
   </div>
-
-<!--div for password-->
 
   <div>
     <label for="password">Enter your password*</label>
@@ -29,15 +25,21 @@
       Password must be longer than {{password.errors.minlength.requiredLength}} symbols. Now you
       entered {{password.errors.minlength.actualLength}} symbols
     </p>
-  </div>
 
-<!--  div for confirm password-->
+    <p *ngIf="password.errors?.['incorrectPassword']">
+      Password must have at least one upper letter, one number and one special symbol
+    </p>
+  </div>
 
   <div>
     <label for="confirm">Confirm password*</label>
     <input id="confirm" type="password" formControlName="confirmPassword" placeholder="*******">
 
-    <p *ngIf="confirmPassword.errors?.['confirmedValidator']">
+    <p *ngIf="confirmPassword.errors?.['required'] && confirmPassword.dirty">
+      Enter your password
+    </p>
+
+    <p *ngIf="confirmPassword.errors?.['confirmedValidator'] && password.dirty && confirmPassword.dirty">
       Passwords aren`t the same
     </p>
   </div>

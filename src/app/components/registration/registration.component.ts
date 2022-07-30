@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {ConfirmedValidator} from "../../shared/validators/checkPassword.validator";
-import {checkPasswordValidator} from "../../shared/validators/checkStrongPassword.validator";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { checkPasswordValidator } from "../../shared/validators/checkStrongPassword.validator";
+import { confirmedValidator } from "../../shared/validators/confirmedValidator.validator";
 
 @Component({
   selector: 'app-registration',
@@ -20,17 +20,19 @@ export class RegistrationComponent implements OnInit {
 
   setForm() {
     this.registrationForm = this.fb.group({
-      login: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.minLength(7), Validators.required, checkPasswordValidator()]],
+      login: ['ickizz@gmail.com', { validators: [Validators.required, Validators.email], updateOn: "blur" }],
+      password: ['', {
+        validators: [Validators.minLength(7), Validators.required, checkPasswordValidator()],
+        updateOn: "blur"
+      }],
       confirmPassword: ['', Validators.required]
     }, {
-      validator: [ConfirmedValidator('password', 'confirmPassword')]
-      // updateOn: 'blur'
+      validator: [confirmedValidator('password', 'confirmPassword')],
     })
   }
 
   submit() {
-    console.log(this.registrationForm)
+    console.log(this.registrationForm);
   }
 
   get login(): FormControl {
@@ -44,7 +46,5 @@ export class RegistrationComponent implements OnInit {
   get confirmPassword(): FormControl {
     return this.registrationForm.get('confirmPassword') as FormControl
   }
-
-
 
 }
