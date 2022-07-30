@@ -2,28 +2,24 @@
 
 <form [formGroup]="registrationForm">
 
+<!--Div for login-->
 
   <div>
-
     <label for="email">Enter email*</label>
-
     <input id="email" type="text" formControlName="login" placeholder="ex: ickizz@gmail.com">
-
     <p *ngIf="login.errors?.['required'] && login.dirty">
       Email field cant be empty
     </p>
-
     <p *ngIf="login.errors?.['email']">
       Email is incorrect
     </p>
-
   </div>
 
+<!--div for password-->
 
   <div>
     <label for="password">Enter your password*</label>
     <input id="password" type="password" formControlName="password" placeholder="*******">
-
 
     <p *ngIf="password.errors?.['required'] && password.dirty">
       Enter your password
@@ -33,9 +29,9 @@
       Password must be longer than {{password.errors.minlength.requiredLength}} symbols. Now you
       entered {{password.errors.minlength.actualLength}} symbols
     </p>
-
   </div>
 
+<!--  div for confirm password-->
 
   <div>
     <label for="confirm">Confirm password*</label>
@@ -44,7 +40,6 @@
     <p *ngIf="confirmPassword.errors?.['confirmedValidator']">
       Passwords aren`t the same
     </p>
-
   </div>
 
   <button (click)="submit()">Send registration form</button>
