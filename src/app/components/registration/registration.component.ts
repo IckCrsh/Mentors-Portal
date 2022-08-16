@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { checkPasswordValidator } from "../../shared/validators/checkStrongPassword.validator";
 import { confirmedValidator } from "../../shared/validators/confirmedValidator.validator";
+import { UserService } from "../../shared/services/user.service";
 
 @Component({
   selector: 'app-registration',
@@ -11,7 +12,8 @@ import { confirmedValidator } from "../../shared/validators/confirmedValidator.v
 export class RegistrationComponent implements OnInit {
   registrationForm!: FormGroup
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private userService: UserService) {
+
   }
 
   ngOnInit(): void {
@@ -32,7 +34,16 @@ export class RegistrationComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.registrationForm);
+    if (this.registrationForm.invalid) {
+      this.registrationForm.markAsPristine();
+      return
+    }
+    this.userService.registration({
+      username: this.login.value,
+      password: this.password.value
+    }).subscribe( res => {
+      console.log(res);
+    })
   }
 
   get login(): FormControl {

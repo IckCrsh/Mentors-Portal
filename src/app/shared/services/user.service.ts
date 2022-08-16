@@ -1,17 +1,33 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { ILogin } from "../interfaces/login.interface";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor() { }
+constructor(private http: HttpClient){}
+
+login(value: ILogin) {
+ // @ts-ignore
+  return this.http.post('https://mentors-portal.herokuapp.com/auth/login', {
+    username: value.username,
+    password: value.password
+  } )
+
 }
-
-// Создать три метода
-
-// 1. Добавить данные в локалсторадж
-
-// 2. Брать дани з локалсторж
-
-// 3. Сравнивать данные
+registration(value: ILogin) {
+  return this.http.post('https://mentors-portal.herokuapp.com/auth/registration', {
+    username: value.username,
+    password: value.password
+  })
+}
+getUsers(value: string) {
+  return this.http.get('https://mentors-portal.herokuapp.com/auth/users', {
+    headers: {
+      Authorization: `Bearer ${value}`
+    }
+  })
+}
+}
