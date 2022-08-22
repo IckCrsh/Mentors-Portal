@@ -1,3 +1,47 @@
-<p>login works!</p>
+<h1>LOGIN WORKS</h1>
 
-<button (click)="submit()" >LOGIN</button>
+<form [formGroup]="loginForm">
+
+  <div>
+    <label for="login">Enter your login*</label>
+    <input id="login" type="text" formControlName="login" placeholder="ex: ickizz@gmail.com">
+    <p *ngIf="login.errors?.['required'] && login.dirty && login.updateOn === 'blur'">
+      Email field cant be empty
+    </p>
+    <p *ngIf="login.errors?.['email']">
+      Login is incorrect
+    </p>
+  </div>
+
+  <div>
+    <label for="password">Enter your password*</label>
+    <input id="password" type="password" formControlName="password" placeholder="*******">
+
+    <p *ngIf="password.errors?.['required'] && password.dirty">
+      Enter your password
+    </p>
+
+    <p *ngIf="password.errors?.['minlength']">
+      Password must be longer than {{password.errors.minlength.requiredLength}} symbols. Now you
+      entered {{password.errors.minlength.actualLength}} symbols
+    </p>
+
+    <p *ngIf="password.errors?.['incorrectPassword']">
+      Password must have at least one upper letter, one number and one special symbol
+    </p>
+
+  </div>
+
+  <h5></h5>
+  <p-progressSpinner class="spinner-login" *ngIf="isLoading" styleClass="custom-spinner" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s">
+
+  </p-progressSpinner>
+
+  <br>
+
+  <button (click)="submit()" [disabled]="loginForm.invalid">LOGIN</button>
+
+
+</form>
+
+
