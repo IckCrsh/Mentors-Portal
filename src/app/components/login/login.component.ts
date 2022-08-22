@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from "../../shared/services/user.service";
 import { switchMap } from "rxjs";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { checkPasswordValidator } from "../../shared/validators/checkStrongPassword.validator";
 
 @Component({
   selector: 'app-login',
@@ -9,25 +11,54 @@ import { switchMap } from "rxjs";
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private userService: UserService) { }
+  loginForm!: FormGroup;
+  isLoading = false;
+
+  constructor(private userService: UserService, private fb: FormBuilder) {
+  }
 
   ngOnInit(): void {
+    this.setForm()
   }
-submit() {
-    // TODO Удалить, коли створим логин компонент
-   this.userService.login({
-      username: 'ickizz@gmail.com',
-      password: '!Ickizz17'
+
+  setForm() {
+    this.loginForm = this.fb.group({
+      login: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(7), checkPasswordValidator()]]
     })
-     .pipe(
-       switchMap(item => {
-         // @ts-ignore
-         return this.userService.getUsers(item.token)
-       }),
-     )
-     .subscribe( res => {
-     console.log(res);
-   });
-  // localStorage.clear()
-}
+  }
+
+  submit() {
+
+    this.isLoading = true;
+
+    const dataToBackend = {
+      username: this.login.value,
+      password: this.password.value
+    }
+
+    this.userService.login(dataToBackend)
+      .pipe(
+        switchMap(item => {
+          // @ts-ignore
+          return this.userService.getCurrentUser(item.token)
+        }),
+      )
+      .subscribe(res => {
+        this.isLoading = false;
+        console.log(res);
+      }, er => {
+        this.isLoading = false;
+        console.log(er)
+      });
+  }
+
+  get login(): FormControl {
+    return this.loginForm.get('login') as FormControl
+  }
+
+  get password(): FormControl {
+    return this.loginForm.get('password') as FormControl
+  }
+
 }

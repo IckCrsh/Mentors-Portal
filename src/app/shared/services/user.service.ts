@@ -30,4 +30,11 @@ getUsers(value: string) {
     }
   })
 }
+  getCurrentUser(value: string) {
+    return this.http.get('https://mentors-portal.herokuapp.com/auth/user', {
+      headers: {
+        Authorization: `Bearer ${value}`
+      }
+    })
+  }
 }
