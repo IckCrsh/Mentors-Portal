@@ -41,8 +41,10 @@ export class RegistrationComponent implements OnInit {
     this.userService.registration({
       username: this.login.value,
       password: this.password.value
-    }).subscribe( res => {
-      console.log(res);
+    }).subscribe(res => {
+
+      //TODO Field for toaster
+
     })
   }
 
@@ -57,5 +59,4 @@ export class RegistrationComponent implements OnInit {
   get confirmPassword(): FormControl {
     return this.registrationForm.get('confirmPassword') as FormControl
   }
-
 }

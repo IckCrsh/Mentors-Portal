@@ -32,16 +32,10 @@
 
   </div>
 
-  <h5></h5>
-  <p-progressSpinner class="spinner-login" *ngIf="isLoading" styleClass="custom-spinner" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s">
-
-  </p-progressSpinner>
-
-  <br>
-
   <button (click)="submit()" [disabled]="loginForm.invalid">LOGIN</button>
-
 
 </form>
 
+<p-progressSpinner class="spinner-login" *ngIf="isLoading" styleClass="custom-spinner" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s">
 
+</p-progressSpinner>

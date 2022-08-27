@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from "../../shared/services/user.service";
-import { switchMap } from "rxjs";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { checkPasswordValidator } from "../../shared/validators/checkStrongPassword.validator";
+import { CookieService } from "ngx-cookie";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -14,11 +15,14 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading = false;
 
-  constructor(private userService: UserService, private fb: FormBuilder) {
+  constructor(private userService: UserService, private fb: FormBuilder, private _cookieService: CookieService, private router: Router) {
   }
 
   ngOnInit(): void {
     this.setForm()
+    this.userService.getCurrentUser().subscribe(res => {
+      console.log(res)
+    })
   }
 
   setForm() {
@@ -38,18 +42,13 @@ export class LoginComponent implements OnInit {
     }
 
     this.userService.login(dataToBackend)
-      .pipe(
-        switchMap(item => {
-          // @ts-ignore
-          return this.userService.getCurrentUser(item.token)
-        }),
-      )
+
       .subscribe(res => {
         this.isLoading = false;
-        console.log(res);
+        this._cookieService.putObject('authorizationData', res);
+        this.router.navigate(['/admin'])
       }, er => {
         this.isLoading = false;
-        console.log(er)
       });
   }
 
